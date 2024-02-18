@@ -1,0 +1,33 @@
+# Final Project
+#Kevin Hansen, Peter Henry, Noel Ford
+
+```{r}
+# Reading in the CSV file as a data frame
+library(tidyverse)
+library(readr)
+df <- read_csv("C:\\Users\\kchan\\OneDrive\\Desktop\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv")
+glimpse(df)
+```
+
+```{r}
+#Creating a subset of the original data frame with only relevant data
+incidentFrame <- df[c("Incident Date", "Incident Time", "Incident Year", "Incident Day of Week",
+                       "Incident ID", "Incident Number", "Report Type Code", "Report Type Description", "Incident Code",
+                       "Incident Category", "Incident Subcategory", "Incident Description", "Police District")]
+glimpse(incidentFrame)
+
+```
+
+```{r}
+table(incidentFrame$`Incident Category`)
+#plotCategories <- ggplot(incidentFrame) + geom_col(aes(x = "Incident Category"), y = count("Incident Category"))
+#plotCategories
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
