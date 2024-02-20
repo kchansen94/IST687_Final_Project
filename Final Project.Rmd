@@ -6,7 +6,6 @@
 library(tidyverse)
 library(readr)
 df <- read_csv("C:\\Users\\kchan\\OneDrive\\Desktop\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv")
-glimpse(df)
 ```
 
 ```{r}
@@ -14,20 +13,40 @@ glimpse(df)
 incidentFrame <- df[c("Incident Date", "Incident Time", "Incident Year", "Incident Day of Week",
                        "Incident ID", "Incident Number", "Report Type Code", "Report Type Description", "Incident Code",
                        "Incident Category", "Incident Subcategory", "Incident Description", "Police District")]
-glimpse(incidentFrame)
+```
+
+```{r}
+#Table of the police districts
+table(incidentFrame$`Police District`)
+
+#Remove Incidences that were not in SF
+incidentFrame2 <- subset(incidentFrame, !(incidentFrame$`Police District` %in% c("Out of SF"))) 
+
+#Confirm Removal of Out of SF
+table(incidentFrame2$`Police District`)
 
 ```
 
 ```{r}
-table(incidentFrame$`Incident Category`)
-#plotCategories <- ggplot(incidentFrame) + geom_col(aes(x = "Incident Category"), y = count("Incident Category"))
-#plotCategories
+# Table showing the Number of incidences per incident category
+table(incidentFrame2$`Incident Category`)
+
+#Remove some incident categories that are not relevant.
+# Remove Categories: Case Closure, Other offenses, Other, Non-Criminal, Other Miscellaneous 
+incidentFrame3 <- subset(incidentFrame2, !(incidentFrame2$`Incident Category` %in% c("Case Closure","Other offenses", "Other", "Non-Criminal", "Other Miscellaneous"))) 
+
+# Check they were removed                     
+table(incidentFrame3$`Incident Category`)
 ```
 
 ```{r}
+# Bar Graphs of Incident cases per Police District
+library(Rcmdr)
+with(incidentFrame3, Barplot(incidentFrame3$`Incident Category`, by=incidentFrame3$`Police District`, 
+  style="divided", legend.pos="above", xlab='Incident Category', 
+  ylab="Frequency", label.bars=FALSE))
 
-```
-
-```{r}
-
+with(incidentFrame3, Barplot(incidentFrame3$`Police District`, by=incidentFrame3$`Incident Category`, 
+  style="divided", legend.pos="above", xlab='Police District', 
+  ylab="Frequency", label.bars=FALSE))
 ```
