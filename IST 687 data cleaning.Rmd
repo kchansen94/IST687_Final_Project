@@ -12,7 +12,7 @@ output: html_document
 library(ggplot2)
 library(ggmap)
 library(tidyverse)
-# register_google(key = "AIzaSyDy1gb9rXvf3SbOM6yWw3JUh6c5mp17drg") ---- I turned off and deleted API key due to potentially having to pay. Since there are a potential of 
+# register_google(key = "") ---- I turned off and deleted API key due to potentially having to pay. Since there are a potential of 
 path_sf <- "C:\\Users\\Peter Henry\\Desktop\\Syracuse University\\IST 687 Intro to Data Science\\Group Project - IST 687 Intro to Data Science\\SF Crime Dataset\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv"
 df_sf_original <- read_csv("C:\\Users\\Peter Henry\\Desktop\\Syracuse University\\IST 687 Intro to Data Science\\Group Project - IST 687 Intro to Data Science\\SF Crime Dataset\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv")
 
