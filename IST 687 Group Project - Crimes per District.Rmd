@@ -61,7 +61,7 @@ violent_incident_counts <- violent_DF %>%
 
 
 ```{r}
-#Creating a histogram off of violent crimes
+#Creating a bar chart off of violent crimes
 violent_incident_counts <- violent_incident_counts %>%
   mutate(`Police District` = fct_reorder(`Police District`, Count))
 
