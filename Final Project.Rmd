@@ -25,7 +25,49 @@ table(incidentFrame$`Incident Category`)
 ```
 
 ```{r}
+install.packages("arules")
+library(arules)
+library(tidyverse)
+library(readr)
+library(lubridate)
+install.packages("data.table")
+library(data.table)
 
+#Police DataBase
+policedf <- read_csv("C:/Users/Noal/Downloads/Police_Department_Incident_Reports__2018_to_Present_20240208.csv")
+policedf
+str(policedf)
+
+#Research Question: What time of day and what day of the week are the most incedent reports reported 
+                    #so the police department can know when to have more or less officers on duty? 
+
+
+#Create database with only days and times
+timeDF <- policedf[ , 2:5] 
+
+timeDF
+
+# What day or days do incidents happen the most
+days <- timeDF %>% count(`Incident Day of Week`, sort = TRUE)
+
+#Graph days
+daysPlot <- ggplot(data=days, aes(x=days$`Incident Day of Week`, y=days$n)) +
+  geom_bar(stat="identity")
+
+daysPlot
+
+#What hour or hours do the incidents happen the most
+
+timeDF$hour <- hour(timeDF$`Incident Time`)
+
+hours <- timeDF %>% count(hour, sort = TRUE)
+
+#Graph hours
+
+hourPlot <- ggplot(data=hours, aes(x=hours$hour, y=hours$n)) +
+  geom_bar(stat="identity")
+
+hourPlot
 ```
 
 ```{r}
