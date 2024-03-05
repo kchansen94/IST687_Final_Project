@@ -6,6 +6,7 @@
 library(tidyverse)
 library(readr)
 df <- read_csv("C:\\Users\\kchan\\OneDrive\\Desktop\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv")
+
 ```
 
 ```{r}
@@ -13,40 +14,71 @@ df <- read_csv("C:\\Users\\kchan\\OneDrive\\Desktop\\Police_Department_Incident_
 incidentFrame <- df[c("Incident Date", "Incident Time", "Incident Year", "Incident Day of Week",
                        "Incident ID", "Incident Number", "Report Type Code", "Report Type Description", "Incident Code",
                        "Incident Category", "Incident Subcategory", "Incident Description", "Police District")]
+
 ```
 
 ```{r}
 #Table of the police districts
 table(incidentFrame$`Police District`)
-
 #Remove Incidences that were not in SF
 incidentFrame2 <- subset(incidentFrame, !(incidentFrame$`Police District` %in% c("Out of SF"))) 
-
 #Confirm Removal of Out of SF
 table(incidentFrame2$`Police District`)
-
 ```
 
 ```{r}
-# Table showing the Number of incidences per incident category
-table(incidentFrame2$`Incident Category`)
-
-#Remove some incident categories that are not relevant.
+# Remove some incident categories that are not relevant.
 # Remove Categories: Case Closure, Other offenses, Other, Non-Criminal, Other Miscellaneous 
-incidentFrame3 <- subset(incidentFrame2, !(incidentFrame2$`Incident Category` %in% c("Case Closure","Other offenses", "Other", "Non-Criminal", "Other Miscellaneous"))) 
-
-# Check they were removed                     
+incidentFrame3 <- subset(incidentFrame2, !(incidentFrame2$`Incident Category` %in% c("Case Closure","Other offenses", "Other", "Non-Criminal", "Other Miscellaneous")))
+# Remove Incident code, report type/description, ID, subcategory, and description.
+incidentFrame3 <- incidentFrame3[,-5:-9]
+incidentFrame3 <- incidentFrame3[,-6:-7]
+glimpse(incidentFrame3)
+# Remove Data from 2024 because incomplete data for the year
+incidentFrame3 <- incidentFrame3[incidentFrame3$`Incident Year` < 2024,]
+# Table showing the Number of incidences per incident category
 table(incidentFrame3$`Incident Category`)
 ```
+```{r}
+# Break up data set based on police district
+bayviewDF <- incidentFrame3[incidentFrame3$Police.District == "Bayview",]
+centralDF <- incidentFrame3[incidentFrame3$Police.District == "Central",]
+inglesideDF <- incidentFrame3[incidentFrame3$Police.District == "Ingleside",]
+missionDF <- incidentFrame3[incidentFrame3$Police.District == "Mission",]
+northernDF <- incidentFrame3[incidentFrame3$Police.District == "Northern",]
+parkDF <- incidentFrame3[incidentFrame3$Police.District == "Park",]
+RichmondDF <- incidentFrame3[incidentFrame3$Police.District == "Richmond",]
+southernDF <- incidentFrame3[incidentFrame3$Police.District == "Southern",]
+TaravalDF <- incidentFrame3[incidentFrame3$Police.District == "Taraval",]
+tenderloinDF <- incidentFrame3[incidentFrame3$Police.District == "Tenderloin",]
+
+```
 
 ```{r}
-# Bar Graphs of Incident cases per Police District
+#Break up data set based on year
+year_2018 <- incidentFrame3[incidentFrame3$Incident.Year == 2018,]  
+year_2019 <- incidentFrame3[incidentFrame3$Incident.Year == 2019,] 
+year_2020 <- incidentFrame3[incidentFrame3$Incident.Year == 2020,] 
+year_2021 <- incidentFrame3[incidentFrame3$Incident.Year == 2021,] 
+year_2022 <- incidentFrame3[incidentFrame3$Incident.Year == 2022,] 
+year_2023 <- incidentFrame3[incidentFrame3$Incident.Year == 2023,] 
+```
+
+```{r}
 library(Rcmdr)
+#Bar Graph of Number of Incidents per Police District
+with(incidentFrame3, Barplot(incidentFrame3$`Police District`, xlab="Police.District", ylab="Frequency", label.bars=TRUE))
+
+# Bar Graphs of Incident cases per Police District per category
 with(incidentFrame3, Barplot(incidentFrame3$`Incident Category`, by=incidentFrame3$`Police District`, 
   style="divided", legend.pos="above", xlab='Incident Category', 
   ylab="Frequency", label.bars=FALSE))
 
+# Bar Graphs of Incident cases per Police District per category
 with(incidentFrame3, Barplot(incidentFrame3$`Police District`, by=incidentFrame3$`Incident Category`, 
   style="divided", legend.pos="above", xlab='Police District', 
   ylab="Frequency", label.bars=FALSE))
+
+
+
 ```
