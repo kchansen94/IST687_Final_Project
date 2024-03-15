@@ -25,12 +25,10 @@ table(incidentFrame$`Incident Category`)
 ```
 
 ```{r}
-install.packages("arules")
 library(arules)
 library(tidyverse)
 library(readr)
 library(lubridate)
-install.packages("data.table")
 library(data.table)
 
 #Police DataBase
@@ -62,13 +60,110 @@ timeDF$hour <- hour(timeDF$`Incident Time`)
 
 hours <- timeDF %>% count(hour, sort = TRUE)
 
+
 #Graph hours
 
 hourPlot <- ggplot(data=hours, aes(x=hours$hour, y=hours$n)) +
   geom_bar(stat="identity")
 
 hourPlot
-```
+
+#What hours on which days (e.g what hours on Monday do most incidents occur?)
+
+hoursDays <- timeDF[, 4:5]
+
+#Monday Hours / Plot
+
+Monday <- hoursDays[hoursDays$`Incident Day of Week` == "Monday" ,]
+
+MondayHours <- Monday %>% count(hour, sort=TRUE)
+
+MondayHours
+
+MondayPlot <- ggplot(data=MondayHours, aes(x=hour, y=n)) +
+  geom_bar(stat="identity")
+
+MondayPlot
+
+#Tuesday Hours / Plot
+
+Tuesday <- hoursDays[hoursDays$`Incident Day of Week` == "Tuesday" ,]
+
+TuesdayHours <- Tuesday %>% count(hour, sort=TRUE)
+
+TuesdayHours
+
+TuesdayPlot <- ggplot(data=TuesdayHours, aes(x=hour, y=n)) +
+  geom_bar(stat="identity")
+
+TuesdayPlot
+
+#Wednesday Hours / Plot
+
+Wednesday <- hoursDays[hoursDays$`Incident Day of Week` == "Wednesday" ,]
+
+WednesdayHours <- Wednesday %>% count(hour, sort=TRUE)
+
+WednesdayHours
+
+WednesdayPlot <- ggplot(data=WednesdayHours, aes(x=hour, y=n)) +
+  geom_bar(stat="identity")
+
+WednesdayPlot
+
+#Thursday hours / Plot
+
+Thursday <- hoursDays[hoursDays$`Incident Day of Week` == "Thursday" ,]
+
+ThursdayHours <- Thursday %>% count(hour, sort=TRUE)
+
+ThursdayHours
+
+ThursdayPlot <- ggplot(data=ThursdayHours, aes(x=hour, y=n)) +
+  geom_bar(stat="identity")
+
+ThursdayPlot
+
+#Friday hours / Plot
+
+Friday <- hoursDays[hoursDays$`Incident Day of Week` == "Friday" ,]
+
+FridayHours <- Friday %>% count(hour, sort=TRUE)
+
+FridayHours
+
+FridayPlot <- ggplot(data=FridayHours, aes(x=hour, y=n)) +
+  geom_bar(stat="identity")
+
+FridayPlot
+
+#Saturday Hours / Plot
+
+Saturday <- hoursDays[hoursDays$`Incident Day of Week` == "Saturday" ,]
+
+SaturdayHours <- Saturday %>% count(hour, sort=TRUE)
+
+SaturdayHours
+
+SaturdayPlot <- ggplot(data=SaturdayHours, aes(x=hour, y=n)) +
+  geom_bar(stat="identity")
+
+SaturdayPlot
+
+#Sunday Hours / Plot
+
+Sunday <- hoursDays[hoursDays$`Incident Day of Week` == "Sunday" ,]
+
+SundayHours <- Sunday %>% count(hour, sort=TRUE)
+
+SundayHours
+
+SundayPlot <- ggplot(data=SundayHours, aes(x=hour, y=n)) +
+  geom_bar(stat="identity")
+
+SundayPlot
+
+
 
 ```{r}
 
