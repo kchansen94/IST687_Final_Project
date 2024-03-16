@@ -81,7 +81,8 @@ MondayHours <- Monday %>% count(hour, sort=TRUE)
 MondayHours
 
 MondayPlot <- ggplot(data=MondayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color="red", fill="red") + 
+  ggtitle ("Monday Hours")
 
 MondayPlot
 
@@ -94,7 +95,8 @@ TuesdayHours <- Tuesday %>% count(hour, sort=TRUE)
 TuesdayHours
 
 TuesdayPlot <- ggplot(data=TuesdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color="red", fill="red") + 
+  ggtitle ("Tuesday Hours")
 
 TuesdayPlot
 
@@ -107,7 +109,8 @@ WednesdayHours <- Wednesday %>% count(hour, sort=TRUE)
 WednesdayHours
 
 WednesdayPlot <- ggplot(data=WednesdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color="black", fill="green") + 
+  ggtitle ("Wednesday Hours")
 
 WednesdayPlot
 
@@ -120,7 +123,8 @@ ThursdayHours <- Thursday %>% count(hour, sort=TRUE)
 ThursdayHours
 
 ThursdayPlot <- ggplot(data=ThursdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color="black", fill="yellow") + 
+  ggtitle ("Thursday Hours")
 
 ThursdayPlot
 
@@ -133,7 +137,8 @@ FridayHours <- Friday %>% count(hour, sort=TRUE)
 FridayHours
 
 FridayPlot <- ggplot(data=FridayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color="red", fill="red") + 
+  ggtitle ("Friday Hours")
 
 FridayPlot
 
@@ -146,7 +151,8 @@ SaturdayHours <- Saturday %>% count(hour, sort=TRUE)
 SaturdayHours
 
 SaturdayPlot <- ggplot(data=SaturdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color="black", fill="green") + 
+  ggtitle ("Saturday Hours")
 
 SaturdayPlot
 
@@ -159,7 +165,8 @@ SundayHours <- Sunday %>% count(hour, sort=TRUE)
 SundayHours
 
 SundayPlot <- ggplot(data=SundayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color="black", fill="green") + 
+  ggtitle ("Sunday Hours")
 
 SundayPlot
 
