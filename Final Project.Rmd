@@ -40,6 +40,7 @@ str(policedf)
                     #so the police department can know when to have more or less officers on duty? 
 
 
+
 #Create database with only days and times
 timeDF <- policedf[ , 2:5] 
 
@@ -86,6 +87,7 @@ MondayPlot <- ggplot(data=MondayHours, aes(x=hour, y=n)) +
 
 MondayPlot
 
+
 #Tuesday Hours / Plot
 
 Tuesday <- hoursDays[hoursDays$`Incident Day of Week` == "Tuesday" ,]
@@ -109,7 +111,7 @@ WednesdayHours <- Wednesday %>% count(hour, sort=TRUE)
 WednesdayHours
 
 WednesdayPlot <- ggplot(data=WednesdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity", color="black", fill="green") + 
+  geom_bar(stat="identity", color="black", fill="yellow") + 
   ggtitle ("Wednesday Hours")
 
 WednesdayPlot
@@ -170,6 +172,15 @@ SundayPlot <- ggplot(data=SundayHours, aes(x=hour, y=n)) +
 
 SundayPlot
 
+#Answer to Question 
+#Red Days = Monday, Tuesday, Friday
+#Yellow Days = Wednesday, Thursday 
+#Green Days = Saturday, Sunday
+
+#Hour of most incidents = 12:00
+#Most active time frame when incidents occur = 11:00-20:00 (aka 11am - 8pm) with an exception on all days at 0:00 (aka 12am)
+
+#Recommended shifts would be Monday - Friday from 11am-8pm or Monday-Friday from 5pm - 1am
 
 
 ```{r}
