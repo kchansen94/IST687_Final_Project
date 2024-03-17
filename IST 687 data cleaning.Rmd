@@ -1,0 +1,101 @@
+---
+title: "IST 687 Group Project"
+author: "Peter Henry"
+date: "2024-02-10"
+output: html_document
+---
+
+
+
+
+```{r}
+library(ggplot2)
+library(ggmap)
+library(tidyverse)
+# register_google(key = "") ---- I turned off and deleted API key due to potentially having to pay. Since there are a potential of 
+path_sf <- "C:\\Users\\Peter Henry\\Desktop\\Syracuse University\\IST 687 Intro to Data Science\\Group Project - IST 687 Intro to Data Science\\SF Crime Dataset\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv"
+df_sf_original <- read_csv("C:\\Users\\Peter Henry\\Desktop\\Syracuse University\\IST 687 Intro to Data Science\\Group Project - IST 687 Intro to Data Science\\SF Crime Dataset\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv")
+
+
+```
+```{r}
+all_columns <- colnames(df_sf_original)
+all_columns
+crimes <- df_sf_original %>% distinct(`Incident Category`)
+crimes <- crimes %>% arrange(`Incident Category`)
+crimes
+count_crimes <- df_sf_original %>%  count(`Incident Category`) %>% 
+  arrange(desc(n))
+count_crimes 
+
+```
+```{r}
+glimpse(df_sf_original)
+
+
+crime_date_and_crime <- df_sf_original %>% select(`Incident Date`,`Incident Time`, `Incident Year`, `Incident Day of Week`, `Incident Category`, `Incident Subcategory`, `Report Datetime`,`Row ID`,`Incident ID`, Resolution, Latitude, Longitude, Intersection, `Police District`)
+glimpse(crime_date_and_crime)
+head(crime_date_and_crime)
+```
+```{r}
+crime_date_and_crime <- crime_date_and_crime %>%  select(-`Row ID`)
+glimpse(crime_date_and_crime)
+head(crime_date_and_crime)
+```
+```{r}
+sf_lat_na_count_orig <- df_sf_original %>% summarise(sf_lat_long_na_count = sum(is.na(Latitude)))
+sf_lat_na_count <- crime_date_and_crime %>% summarise(sf_lat_long_na_count = sum(is.na(Latitude)))
+sf_lat_na_count_orig
+sf_lat_na_count  
+
+crime_date_and_crime <- crime_date_and_crime %>% filter(!is.na(Latitude)) %>% 
+  filter(!is.na(Longitude))
+sf_lat_na_count 
+
+sf_lat_na_count_new <- crime_date_and_crime %>% summarise(crime_date_and_crime = sum(is.na(Latitude)))
+sf_lat_na_count_new
+
+sf_long_na_count_new <- crime_date_and_crime %>% summarise(crime_date_and_crime = sum(is.na(Longitude)))
+sf_long_na_count_new
+
+remove(sf_lat_na_count_orig,sf_lat_na_count,sf_lat_na_count_new,sf_lat_long_na_count,sf_lat_long_na_count_orig,sf_long_na_count_new)
+
+# write_csv(crime_date_and_crime, "draft_output_crime_data_2024.02.09.csv") 
+#path was to C:\Users\Peter Henry\Desktop\Syracuse University\IST 687 Intro to Data Science\Group Project - IST 687 Intro to Data Science
+
+```
+
+```{r}
+### The below code will show a map of crime areas. I turned off and delted my google api key that is needed to fulfill the request as I do not want to pay for anyting and with the potential of ~800,000 points of data, that might be quite a bit of money.
+#unique_lat <- crime_date_and_crime %>% distinct(Latitude)
+#unique_long <- crime_date_and_crime %>% distinct(Longitude)
+#map_data <- data.frame(crime_date_and_crime$Latitude, crime_date_and_crime$Longitude)
+#map <- get_map(location = c(lon = mean(map_data$crime_date_and_crime.Longitude), lat = mean(map_data$crime_date_and_crime.Latitude)), zoom = 4, maptype = "terrain")
+#ggmap(map) + geom_point(data = map_data, aes(x = map_data$crime_date_and_crime.Longitude, y = map_data$crime_date_and_crime.Latitude),color = "red", size = 3)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
