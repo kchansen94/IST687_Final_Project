@@ -245,13 +245,6 @@ tendpdDF <- data.frame(dataYears, tendpdIncidents)
 ggplot(tendpdDF, aes(x=dataYears, y=tendpdIncidents)) + geom_point() + geom_smooth(method="lm", fullrange=T) + 
   xlim(2018, 2025) + ggtitle("Tenderloin Police District")
 ```
----
-title: "IST 687 Group Project - Crimes per District"
-author: "Peter Henry"
-date: "2024-03-04"
-output: html_document
----
-
 ```{r}
 # Loading the DF
 library(tidyverse)
