@@ -46,12 +46,24 @@ timeDF <- policedf[ , 2:5]
 
 timeDF
 
+
+
+#Overall Hours / Days for All Districts Combined
+
+
+
 # What day or days do incidents happen the most
 days <- timeDF %>% count(`Incident Day of Week`, sort = TRUE)
 
 #Graph days
+days$`Incident Day of Week` <- factor(days$`Incident Day of Week`,
+       levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
+
 daysPlot <- ggplot(data=days, aes(x=days$`Incident Day of Week`, y=days$n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color = "black", fill = "lightgreen") + labs(y= "Number of Incidents", x = "Day of Week") +
+  ggtitle("Overall Districts' Days and Incidents") +
+  geom_text(aes(label = n), vjust = -0.3, color = "black")
 
 daysPlot
 
@@ -65,122 +77,178 @@ hours <- timeDF %>% count(hour, sort = TRUE)
 #Graph hours
 
 hourPlot <- ggplot(data=hours, aes(x=hours$hour, y=hours$n)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity", color = "black", fill = "lightgreen") + 
+  labs(y= "Number of Incidents", x = "Hour of Day") +
+  ggtitle("Overall Districts' Hours and Incidents") 
 
 hourPlot
 
-#What hours on which days (e.g what hours on Monday do most incidents occur?)
 
-hoursDays <- timeDF[, 4:5]
-
-#Monday Hours / Plot
-
-Monday <- hoursDays[hoursDays$`Incident Day of Week` == "Monday" ,]
-
-MondayHours <- Monday %>% count(hour, sort=TRUE)
-
-MondayHours
-
-MondayPlot <- ggplot(data=MondayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity", color="red", fill="red") + 
-  ggtitle ("Monday Hours")
-
-MondayPlot
+#District Overall Days and Hours 
 
 
-#Tuesday Hours / Plot
+#District Hours
+districthdf <- policedf[ , c('Incident Time', 'Police District')]
+districthdf
 
-Tuesday <- hoursDays[hoursDays$`Incident Day of Week` == "Tuesday" ,]
+districthdf$hour <- hour(districthdf$`Incident Time`)
 
-TuesdayHours <- Tuesday %>% count(hour, sort=TRUE)
+dhours <- districthdf %>% count(hour, sort = TRUE)
 
-TuesdayHours
 
-TuesdayPlot <- ggplot(data=TuesdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity", color="red", fill="red") + 
-  ggtitle ("Tuesday Hours")
+#Days / Hours based on Top Five Most Incident Districts
+districtdf <- policedf[, c('Incident Day of Week', 'Police District')]
+districtdf
 
-TuesdayPlot
+#Mission District Days
+missionDistrict <- districtdf[districtdf$`Police District` == "Mission",]
 
-#Wednesday Hours / Plot
+missionDistrict$`Incident Day of Week` <- factor(missionDistrict$`Incident Day of Week`,
+                                                 levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
 
-Wednesday <- hoursDays[hoursDays$`Incident Day of Week` == "Wednesday" ,]
+missionCount <- missionDistrict %>% count(`Incident Day of Week`)
 
-WednesdayHours <- Wednesday %>% count(hour, sort=TRUE)
 
-WednesdayHours
+missionPlot <- ggplot(data = missionCount, aes(x = `Incident Day of Week`, y = n)) +  
+  geom_bar(stat = "identity", color = "black", fill = "lightsalmon") +  
+  geom_text(aes(label = n), vjust = -0.3, color = "black") + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + 
+  ggtitle("Mission District Incidents by Day of Week") +  
+  labs(y = "Number of Incidents", x = "Day of the Week") +  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-WednesdayPlot <- ggplot(data=WednesdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity", color="black", fill="yellow") + 
-  ggtitle ("Wednesday Hours")
 
-WednesdayPlot
+#Mission District Hours
 
-#Thursday hours / Plot
+missionTwo <- districthdf[districthdf$`Police District` == "Mission",]
 
-Thursday <- hoursDays[hoursDays$`Incident Day of Week` == "Thursday" ,]
+missionHours <- missionTwo %>% count(hour, sort=TRUE)
 
-ThursdayHours <- Thursday %>% count(hour, sort=TRUE)
+missionHPlot <- ggplot(data=missionHours, aes(x=missionHours$hour, y=n)) +
+  geom_bar(stat="identity", color="black", fill="plum1") + 
+  ggtitle ("Mission Hours") + labs(y= "Incidents", x = "Hours")
 
-ThursdayHours
 
-ThursdayPlot <- ggplot(data=ThursdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity", color="black", fill="yellow") + 
-  ggtitle ("Thursday Hours")
 
-ThursdayPlot
+#Tenderloin District Days
+tenderloinDistrict <- districtdf[districtdf$`Police District` == "Tenderloin",]
 
-#Friday hours / Plot
+tenderloinCount <- tenderloinDistrict %>% count(tenderloinDistrict$`Incident Day of Week`)
 
-Friday <- hoursDays[hoursDays$`Incident Day of Week` == "Friday" ,]
+tenderloinDistrict$`Incident Day of Week` <- factor(tenderloinDistrict$`Incident Day of Week`,
+                                                 levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
 
-FridayHours <- Friday %>% count(hour, sort=TRUE)
 
-FridayHours
+tenderloinPlot <- ggplot(data = tenderloinCount, aes(x = `tenderloinDistrict$\`Incident Day of Week\``, y = n)) +  
+  geom_bar(stat = "identity", color = "black", fill = "lightsalmon2") +  
+  geom_text(aes(label = n), vjust = -0.3, color = "black") + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + 
+  ggtitle("Tenderloin District Incidents by Day of Week") +  
+  labs(y = "Number of Incidents", x = "Day of the Week") +  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-FridayPlot <- ggplot(data=FridayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity", color="red", fill="red") + 
-  ggtitle ("Friday Hours")
+#Tenderloin District Hours
+tenderloinTwo <- districthdf[districthdf$`Police District` == "Tenderloin",]
 
-FridayPlot
+tenderloinHours <- tenderloinTwo %>% count(hour, sort=TRUE)
 
-#Saturday Hours / Plot
+tenderloinHPlot <- ggplot(data=tenderloinHours, aes(x=tenderloinHours$hour, y=n)) +
+  geom_bar(stat="identity", color="black", fill="plum") + 
+  ggtitle ("Tenderloin Hours") + labs(y= "Incidents", x = "Hours")
 
-Saturday <- hoursDays[hoursDays$`Incident Day of Week` == "Saturday" ,]
 
-SaturdayHours <- Saturday %>% count(hour, sort=TRUE)
 
-SaturdayHours
+#Central District Days
 
-SaturdayPlot <- ggplot(data=SaturdayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity", color="black", fill="green") + 
-  ggtitle ("Saturday Hours")
+centralDistrict <- districtdf[districtdf$`Police District` == "Central",]
 
-SaturdayPlot
 
-#Sunday Hours / Plot
+centralDistrict$`Incident Day of Week` <- factor(centralDistrict$`Incident Day of Week`,
+                                                 levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
 
-Sunday <- hoursDays[hoursDays$`Incident Day of Week` == "Sunday" ,]
+centralCount <- centralDistrict %>% count(centralDistrict$`Incident Day of Week`)
 
-SundayHours <- Sunday %>% count(hour, sort=TRUE)
+centralPlot <- ggplot(data=centralCount, aes(x=`centralDistrict$\`Incident Day of Week\``, y=n)) +
+  geom_bar(stat="identity", color="black", fill="lightsalmon3") + 
+  ggtitle ("Central Days") +
+  geom_text(aes(label = n), vjust = -0.3, color = "black") + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + 
+  ggtitle("Central District Incidents by Day of Week") +  
+  labs(y = "Number of Incidents", x = "Day of the Week") +  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-SundayHours
 
-SundayPlot <- ggplot(data=SundayHours, aes(x=hour, y=n)) +
-  geom_bar(stat="identity", color="black", fill="green") + 
-  ggtitle ("Sunday Hours")
 
-SundayPlot
+#Central District Hours
 
-#Answer to Question 
-#Red Days = Monday, Tuesday, Friday
-#Yellow Days = Wednesday, Thursday 
-#Green Days = Saturday, Sunday
+centralTwo <- districthdf[districthdf$`Police District` == "Central",]
 
-#Hour of most incidents = 12:00
-#Most active time frame when incidents occur = 11:00-20:00 (aka 11am - 8pm) with an exception on all days at 0:00 (aka 12am)
+centralHours <- tenderloinTwo %>% count(hour, sort=TRUE)
 
-#Recommended shifts would be Monday - Friday from 11am-8pm or Monday-Friday from 5pm - 1am
+centralHPlot <- ggplot(data=centralHours, aes(x=centralHours$hour, y=n)) +
+  geom_bar(stat="identity", color="black", fill="plum2") + 
+  ggtitle ("Central Hours") + labs(y= "Incidents", x = "Hours")
+
+
+
+#Northern District Days
+
+northernDistrict <- districtdf[districtdf$`Police District` == "Northern",]
+
+northernDistrict$`Incident Day of Week` <- factor(northernDistrict$`Incident Day of Week`,
+                                                 levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
+northernCount <- northernDistrict %>% count(northernDistrict$`Incident Day of Week`)
+
+northernPlot <- ggplot(data=northernCount, aes(x=`northernDistrict$\`Incident Day of Week\``, y=n)) +
+  geom_bar(stat="identity", color="black", fill="lightsalmon2") + 
+  ggtitle ("Northern District") +
+  geom_text(aes(label = n), vjust = -0.3, color = "black") + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + 
+  ggtitle("Northern District Incidents by Day of Week") +  
+  labs(y = "Number of Incidents", x = "Day of the Week") +  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+#Northern District Hours
+
+northernTwo <- districthdf[districthdf$`Police District` == "Northern",]
+
+northernHours <- northernTwo %>% count(hour, sort=TRUE)
+
+northernHPlot <- ggplot(data=northernHours, aes(x=northernHours$hour, y=n)) +
+  geom_bar(stat="identity", color="black", fill="plum1") + 
+  ggtitle ("Northern Hours") + labs(y= "Incidents", x = "Hours")
+
+#Southern District Days
+
+southernDistrict <- districtdf[districtdf$`Police District` == "Southern",]
+
+southernDistrict$`Incident Day of Week` <- factor(southernDistrict$`Incident Day of Week`,
+                                                  levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
+
+southernCount <- southernDistrict %>% count(southernDistrict$`Incident Day of Week`)
+
+southernPlot <- ggplot(data=southernCount, aes(x=`southernDistrict$\`Incident Day of Week\``, y=n)) +
+  geom_bar(stat="identity", color="black", fill="lightsalmon3") + 
+  ggtitle ("Southern District") +
+  geom_text(aes(label = n), vjust = -0.3, color = "black") + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + 
+  ggtitle("Southern District Incidents by Day of Week") +  
+  labs(y = "Number of Incidents", x = "Day of the Week") +  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#Southern District Hours
+
+southernTwo <- districthdf[districthdf$`Police District` == "Southern",]
+
+southernHours <- southernTwo %>% count(hour, sort=TRUE)
+
+southernHPlot <- ggplot(data=southernHours, aes(x=southernHours$hour, y=n)) +
+  geom_bar(stat="identity", color="black", fill="plum") + 
+  ggtitle ("Southern Hours") + labs(y= "Incidents", x = "Hours")
+
 
 
 ```{r}
