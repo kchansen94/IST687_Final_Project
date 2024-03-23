@@ -245,3 +245,146 @@ tendpdDF <- data.frame(dataYears, tendpdIncidents)
 ggplot(tendpdDF, aes(x=dataYears, y=tendpdIncidents)) + geom_point() + geom_smooth(method="lm", fullrange=T) + 
   xlim(2018, 2025) + ggtitle("Tenderloin Police District")
 ```
+---
+title: "IST 687 Group Project - Crimes per District"
+author: "Peter Henry"
+date: "2024-03-04"
+output: html_document
+---
+
+```{r}
+# Loading the DF
+library(tidyverse)
+df <- read_csv("C:\\Users\\Peter Henry\\Desktop\\Syracuse University\\IST 687 Intro to Data Science\\Group Project - IST 687 Intro to Data Science\\SF Crime Dataset\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv")
+```
+```{r}
+# Loading a slimmed down version of the DF
+incidentFrame <- df[c("Incident Date", "Incident Time", "Incident Year", "Incident Day of Week",
+                       "Incident ID", "Incident Number", "Report Type Code", "Report Type Description", "Incident Code",
+                       "Incident Category", "Incident Subcategory", "Incident Description", "Police District")]
+```
+
+```{r}
+# Looking at the unique Police districts in SF.
+police_districs <- unique(incidentFrame$`Police District`)
+police_districs
+```
+```{r}
+# Summing up the crime count for each district
+crime_count <- incidentFrame %>% group_by(`Police District`) %>% 
+  summarise(count = n())
+crime_count <- crime_count %>% arrange(count)
+crime_count
+
+crime_count <- crime_count %>%
+  mutate(`Police District` = fct_reorder(`Police District`, count))
+crime_count
+```
+
+```{r}
+# Plotting the crime count to get a better picture
+ggplot(crime_count, aes(x=`Police District`, y=count)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x = "Police District", y = "Number of Crimes", title = "Crime Count by District")
+
+# This plot presents the overall crime per Police district in San Francisco. 
+```
+```{r}
+# Looking at violent crimes and see what districts they take place in 
+violent_crime <- unique(incidentFrame$`Incident Category`)
+violent_crime
+view(violent_crime)
+```
+```{r}
+# Creating a DF with only Violent crimes.
+violent_DF <- incidentFrame %>% filter(`Incident Category` %in% c("Assault", "Homicide", "Human Trafficking (A), Commercial Sex Acts", "Human Trafficking (B), Involuntary Servitude", "Human Trafficking, Commercial Sex Acts", "Rape", "Robbery","Suicide"))
+
+violent_incident_counts <- violent_DF %>% 
+  group_by(`Police District`) %>% 
+  summarise(Count = n())
+
+```
+```{r}
+#Creating a bar chart off of violent crimes
+violent_incident_counts <- violent_incident_counts %>%
+  mutate(`Police District` = fct_reorder(`Police District`, Count))
+
+ggplot(violent_incident_counts, aes(x=`Police District`, y=Count)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x = "Police District", y = "Number of Crimes", title = "Crime Count by District")
+```
+
+```{r}
+# Plot for all crime data and plot for violent crime data
+
+#All Crime data
+ggplot(crime_count, aes(x=`Police District`, y=count)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x = "Police District", y = "Number of Crimes", title = "Crime Count by District")
+
+
+#Violent Crime Data
+ggplot(violent_incident_counts, aes(x=`Police District`, y=Count)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x = "Police District", y = "Number of Crimes", title = "Violent Crime Count by District")
+```
+
+```{r}
+# I want the bar charts to match on the x label. Below is the code for that.
+district_order <- crime_count$`Police District`
+
+violent_incident_counts <- violent_incident_counts %>% 
+  mutate(`Police District` = factor(`Police District`, levels = district_order))
+
+#All Crime data
+ggplot(crime_count, aes(x=`Police District`, y=count)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x = "Police District", y = "Number of Crimes", title = "Crime Count by District")
+
+#Violent Crime Data
+ggplot(violent_incident_counts, aes(x=`Police District`, y=Count)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  labs(x = "Police District", y = "Number of Violent Crimes", title = "Violent Crime Count by District")
+
+# The bar charts now follow the Police Districts with the most overall crime. You can see that Violent crimes do not follow the same order once you get to the higher crime rate areas. 'Tenderloin' and 'Mission' Districts stand out the most.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
