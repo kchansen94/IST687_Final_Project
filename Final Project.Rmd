@@ -41,6 +41,22 @@ incidentFrame3 <- incidentFrame3[incidentFrame3$`Incident Year` < 2024,]
 table(incidentFrame3$`Incident Category`)
 ```
 ```{r}
+library(Rcmdr)
+#Bar Graph of Number of Incidents per Police District
+with(incidentFrame3, Barplot(incidentFrame3$`Police District`, xlab="Police District", ylab="Frequency", label.bars=TRUE))
+
+# Bar Graphs of Incident cases per Police District per category
+with(incidentFrame3, Barplot(incidentFrame3$`Incident Category`, by=incidentFrame3$`Police District`, 
+  style="divided", legend.pos="above", xlab='Incident Category', 
+  ylab="Frequency", label.bars=FALSE))
+
+# Bar Graphs of Incident cases per Police District per category
+with(incidentFrame3, Barplot(incidentFrame3$`Police District`, by=incidentFrame3$`Incident Category`, 
+  style="divided", legend.pos="above", xlab='Police District', 
+  ylab="Frequency", label.bars=FALSE))
+
+```
+```{r}
 # Break up data set based on police district
 bayviewDF <- incidentFrame3[incidentFrame3$"Police District" == "Bayview",]
 centralDF <- incidentFrame3[incidentFrame3$"Police District" == "Central",]
@@ -64,24 +80,6 @@ year_2021 <- incidentFrame3[incidentFrame3$"Incident Year" == 2021,]
 year_2022 <- incidentFrame3[incidentFrame3$"Incident Year" == 2022,] 
 year_2023 <- incidentFrame3[incidentFrame3$"Incident Year" == 2023,] 
 ```
-
-```{r}
-library(Rcmdr)
-#Bar Graph of Number of Incidents per Police District
-with(incidentFrame3, Barplot(incidentFrame3$`Police District`, xlab="Police District", ylab="Frequency", label.bars=TRUE))
-
-# Bar Graphs of Incident cases per Police District per category
-with(incidentFrame3, Barplot(incidentFrame3$`Incident Category`, by=incidentFrame3$`Police District`, 
-  style="divided", legend.pos="above", xlab='Incident Category', 
-  ylab="Frequency", label.bars=FALSE))
-
-# Bar Graphs of Incident cases per Police District per category
-with(incidentFrame3, Barplot(incidentFrame3$`Police District`, by=incidentFrame3$`Incident Category`, 
-  style="divided", legend.pos="above", xlab='Police District', 
-  ylab="Frequency", label.bars=FALSE))
-
-```
-
 ```{r}
 # Central PD Forecast for number of crimes going forward
 
