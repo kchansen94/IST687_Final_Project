@@ -242,20 +242,6 @@ tendpdDF <- data.frame(dataYears, tendpdIncidents)
 ggplot(tendpdDF, aes(x=dataYears, y=tendpdIncidents)) + geom_point() + geom_smooth(method="lm", fullrange=T) + 
   xlim(2018, 2025) + ggtitle("Tenderloin Police District")
 ```
-
-
-```{r}
-# Loading the DF
-library(tidyverse)
-df <- read_csv("C:\\Users\\Peter Henry\\Desktop\\Syracuse University\\IST 687 Intro to Data Science\\Group Project - IST 687 Intro to Data Science\\SF Crime Dataset\\Police_Department_Incident_Reports__2018_to_Present_20240208.csv")
-```
-```{r}
-# Loading a slimmed down version of the DF
-incidentFrame <- df[c("Incident Date", "Incident Time", "Incident Year", "Incident Day of Week",
-                       "Incident ID", "Incident Number", "Report Type Code", "Report Type Description", "Incident Code",
-                       "Incident Category", "Incident Subcategory", "Incident Description", "Police District")]
-```
-
 ```{r}
 # Looking at the unique Police districts in SF.
 police_districs <- unique(incidentFrame$`Police District`)
