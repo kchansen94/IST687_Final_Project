@@ -28,58 +28,57 @@ table(incidentFrame2$`Police District`)
 ```
 
 ```{r}
-# Remove some incident categories that are not relevant.
-# Remove Categories: Case Closure, Other offenses, Other, Non-Criminal, Other Miscellaneous 
-incidentFrame3 <- subset(incidentFrame2, !(incidentFrame2$`Incident Category` %in% c("Case Closure","Other offenses", "Other", "Non-Criminal", "Other Miscellaneous")))
 # Remove Incident code, report type/description, ID, subcategory, and description.
-incidentFrame3 <- incidentFrame3[,-5:-9]
-incidentFrame3 <- incidentFrame3[,-6:-7]
-glimpse(incidentFrame3)
+incidentFrame2 <- incidentFrame2[,-5:-9]
+incidentFrame2 <- incidentFrame2[,-6:-7]
+glimpse(incidentFrame2)
 # Remove Data from 2024 because incomplete data for the year
-incidentFrame3 <- incidentFrame3[incidentFrame3$`Incident Year` < 2024,]
+incidentFrame2 <- incidentFrame2[incidentFrame2$`Incident Year` < 2024,]
 # Table showing the Number of incidences per incident category
-table(incidentFrame3$`Incident Category`)
-```
-```{r}
-library(Rcmdr)
-#Bar Graph of Number of Incidents per Police District
-with(incidentFrame3, Barplot(incidentFrame3$`Police District`, xlab="Police District", ylab="Frequency", label.bars=TRUE))
-
-# Bar Graphs of Incident cases per Police District per category
-with(incidentFrame3, Barplot(incidentFrame3$`Incident Category`, by=incidentFrame3$`Police District`, 
-  style="divided", legend.pos="above", xlab='Incident Category', 
-  ylab="Frequency", label.bars=FALSE))
-
-# Bar Graphs of Incident cases per Police District per category
-with(incidentFrame3, Barplot(incidentFrame3$`Police District`, by=incidentFrame3$`Incident Category`, 
-  style="divided", legend.pos="above", xlab='Police District', 
-  ylab="Frequency", label.bars=FALSE))
-
+table(incidentFrame2$`Incident Category`)
 ```
 ```{r}
 # Break up data set based on police district
-bayviewDF <- incidentFrame3[incidentFrame3$"Police District" == "Bayview",]
-centralDF <- incidentFrame3[incidentFrame3$"Police District" == "Central",]
-inglesideDF <- incidentFrame3[incidentFrame3$"Police District" == "Ingleside",]
-missionDF <- incidentFrame3[incidentFrame3$"Police District" == "Mission",]
-northernDF <- incidentFrame3[incidentFrame3$"Police District" == "Northern",]
-parkDF <- incidentFrame3[incidentFrame3$"Police District" == "Park",]
-RichmondDF <- incidentFrame3[incidentFrame3$"Police District" == "Richmond",]
-southernDF <- incidentFrame3[incidentFrame3$"Police District" == "Southern",]
-TaravalDF <- incidentFrame3[incidentFrame3$"Police District" == "Taraval",]
-tenderloinDF <- incidentFrame3[incidentFrame3$"Police District" == "Tenderloin",]
+bayviewDF <- incidentFrame2[incidentFrame2$"Police District" == "Bayview",]
+centralDF <- incidentFrame2[incidentFrame2$"Police District" == "Central",]
+inglesideDF <- incidentFrame2[incidentFrame2$"Police District" == "Ingleside",]
+missionDF <- incidentFrame2[incidentFrame2$"Police District" == "Mission",]
+northernDF <- incidentFrame2[incidentFrame2$"Police District" == "Northern",]
+parkDF <- incidentFrame2[incidentFrame2$"Police District" == "Park",]
+RichmondDF <- incidentFrame2[incidentFrame2$"Police District" == "Richmond",]
+southernDF <- incidentFrame2[incidentFrame2$"Police District" == "Southern",]
+TaravalDF <- incidentFrame2[incidentFrame2$"Police District" == "Taraval",]
+tenderloinDF <- incidentFrame2[incidentFrame2$"Police District" == "Tenderloin",]
 
 ```
 
 ```{r}
 #Break up data set based on year
-year_2018 <- incidentFrame3[incidentFrame3$"Incident Year" == 2018,]  
-year_2019 <- incidentFrame3[incidentFrame3$"Incident Year" == 2019,] 
-year_2020 <- incidentFrame3[incidentFrame3$"Incident Year" == 2020,] 
-year_2021 <- incidentFrame3[incidentFrame3$"Incident Year" == 2021,] 
-year_2022 <- incidentFrame3[incidentFrame3$"Incident Year" == 2022,] 
-year_2023 <- incidentFrame3[incidentFrame3$"Incident Year" == 2023,] 
+year_2018 <- incidentFrame2[incidentFrame2$"Incident Year" == 2018,]  
+year_2019 <- incidentFrame2[incidentFrame2$"Incident Year" == 2019,] 
+year_2020 <- incidentFrame2[incidentFrame2$"Incident Year" == 2020,] 
+year_2021 <- incidentFrame2[incidentFrame2$"Incident Year" == 2021,] 
+year_2022 <- incidentFrame2[incidentFrame2$"Incident Year" == 2022,] 
+year_2023 <- incidentFrame2[incidentFrame2$"Incident Year" == 2023,] 
 ```
+
+```{r}
+library(Rcmdr)
+#Bar Graph of Number of Incidents per Police District
+with(incidentFrame2, Barplot(incidentFrame2$`Police District`, xlab="Police District", ylab="Frequency", label.bars=TRUE))
+
+# Bar Graphs of Incident cases per Police District per category
+with(incidentFrame2, Barplot(incidentFrame2$`Incident Category`, by=incidentFrame2$`Police District`, 
+  style="divided", legend.pos="above", xlab='Incident Category', 
+  ylab="Frequency", label.bars=FALSE))
+
+# Bar Graphs of Incident cases per Police District per category
+with(incidentFrame2, Barplot(incidentFrame2$`Police District`, by=incidentFrame2$`Incident Category`, 
+  style="divided", legend.pos="above", xlab='Police District', 
+  ylab="Frequency", label.bars=FALSE))
+
+```
+
 ```{r}
 # Central PD Forecast for number of crimes going forward
 
@@ -130,7 +129,7 @@ npdIncidents <- c(nrow(year_2018[year_2018$`Police District` == "Northern",]),
 npdDF <- data.frame(dataYears, npdIncidents)
 # Create linear model and extrapolate
 ggplot(npdDF, aes(x=dataYears, y=npdIncidents)) + geom_point() + geom_smooth(method="lm", fullrange=T) + 
-  xlim(2018, 2025) + ggtitle(N="Northern Police District")
+  xlim(2018, 2025) + ggtitle("Northern Police District")
 ```
 ```{r}
 # Southern PD Forecast for number of crimes going forward
@@ -209,7 +208,7 @@ rpdIncidents <- c(nrow(year_2018[year_2018$`Police District` == "Richmond",]),
 rpdDF <- data.frame(dataYears, rpdIncidents)
 # Create linear model and extrapolate
 ggplot(rpdDF, aes(x=dataYears, y=rpdIncidents)) + geom_point() + geom_smooth(method="lm", fullrange=T) + 
-  xlim(2018, 2025) + + ggtitle("Richmond Police District")
+  xlim(2018, 2025) + ggtitle("Richmond Police District")
 ```
 ```{r}
 # Taraval PD Forecast for number of crimes going forward
@@ -243,6 +242,8 @@ tendpdDF <- data.frame(dataYears, tendpdIncidents)
 ggplot(tendpdDF, aes(x=dataYears, y=tendpdIncidents)) + geom_point() + geom_smooth(method="lm", fullrange=T) + 
   xlim(2018, 2025) + ggtitle("Tenderloin Police District")
 ```
+
+
 ```{r}
 # Loading the DF
 library(tidyverse)
